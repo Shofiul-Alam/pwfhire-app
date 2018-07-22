@@ -1,0 +1,592 @@
+<!-- Alert -->
+<div class="{{page.cssClass}}" *ngIf="page.message" style="position: fixed; top: 0; left:0px; width: 100%; text-align: center">
+        <span>
+            {{page.message}}
+            <span aria-hidden="true" (click)="cancelPopUp()" style="float: right;padding-left: 20px; cursor: pointer;"><i class="fa fa-times-circle-o"></i></span>
+        </span>
+</div>
+<!-- Alert End-->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-right" style="width: 100%;margin: 10px 0px;">
+          <button class="btn btn-info btn-sm"
+                  data-toggle="modal" data-target="#add" (click)="clearData()"><i class="fa fa-plus"></i> Add Employee</button>
+          <button class="btn btn-success btn-sm" (click)="downloadCSV()"><i class="fa fa-file"></i> Export to CSV</button>
+          <!-- <button class="btn btn-info btn-sm"><i class="fa fa-plus"></i></button> -->
+        </div>
+        <!--<div class="card" style="margin-bottom: 10px;">-->
+          <!--<div class="card-header filter-head" data-toggle="collapse" data-target="#demo" (click)="toggelIcon()" style="border: 0px;cursor: pointer;">-->
+            <!--<span style="font-weight: 600;"><i class="fa fa-search" style="padding-right: 10px;"></i>Advance Search</span>-->
+            <!--<span *ngIf="!page.pro" style="float: right;"><i class="fa fa-plus"></i></span>-->
+            <!--<span *ngIf="page.pro" style="float: right;"><i class="fa fa-minus"></i></span>-->
+          <!--</div>-->
+          <!--<div id="demo" class="collapse">-->
+            <!--<div class="card-body filter-body">-->
+              <!--<form class="floating-labels">-->
+                <!--<div class="row">-->
+                  <!--<div class="form-group col-xs-6 col-md-4">-->
+                    <!--<label>First Name</label>-->
+                    <!--<input type="text" class="form-control" name="first" [(ngModel)]="empFilter.firstName">-->
+                    <!--<span class="bar"></span>-->
+                  <!--</div>-->
+
+                  <!--<div class="form-group col-xs-6 col-md-4">-->
+                    <!--<label>Last Name</label>-->
+                    <!--<input type="text" class="form-control" name="last" [(ngModel)]="empFilter.lastName">-->
+                    <!--<span class="bar"></span>-->
+                  <!--</div>-->
+                  <!--<div class="form-group col-xs-6 col-md-4">-->
+                    <!--<label>Employee Category</label>-->
+                    <!--<input type="text" class="form-control" name="catageroy" [(ngModel)]="empFilter.employeeCategory">-->
+                    <!--<span class="bar"></span>-->
+                  <!--</div>-->
+
+                <!--</div>-->
+
+                <!--<div class="row">-->
+                  <!--<div class="form-group col-xs-6 col-md-4">-->
+                    <!--<label>Employee Email</label>-->
+                    <!--<input type="text" class="form-control" name="email" [(ngModel)]="empFilter.email">-->
+                    <!--<span class="bar"></span>-->
+                  <!--</div>-->
+
+                  <!--<div class="form-group col-xs-6 col-md-4">-->
+                    <!--<label>Employee Address</label>-->
+                    <!--<input type="text" class="form-control" name="address" [(ngModel)]="empFilter.address">-->
+                    <!--<span class="bar"></span>-->
+                  <!--</div>-->
+                  <!--<div class="form-group col-xs-6 col-md-4">-->
+                    <!--<label>Approved</label>-->
+                    <!--<select class="form-control" name="approved" [(ngModel)]="empFilter.approved">-->
+                      <!--<option></option>-->
+                      <!--<option>Yes</option>-->
+                      <!--<option>No</option>-->
+                    <!--</select>-->
+                    <!--<span class="bar"></span>-->
+                  <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="form-group text-center" style="margin-bottom: 10px;">-->
+                  <!--<button type="button" class="btn btn-info btn-sm" (click)="searchFilterData()">Search</button>-->
+                  <!--<button type="button" class="btn btn-sm btn-danger" (click)="resetFilter()">Cancel</button>-->
+                <!--</div>-->
+              <!--</form>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+        <div class="row" style="margin: 0px; clear: both;">
+          <div class="table-responsive">
+            <table id="example23" class="display nowrap table table-hover color-table dark-table table-striped table-bordered" cellspacing="0" width="100%">
+              <thead>
+              <tr>
+                <th>
+                  SL No
+                    <span class="up-down-angle">
+                                        <div (click)="sort('identifier', 'desc')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="sort('identifier', 'asc')" ><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                </th>
+                <th>
+                  <span class="name-table-head">Employee Name</span>
+                  <span class="up-down-angle">
+                                        <div (click)="sort('firstName', 'desc')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="sort('firstName', 'asc')" ><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                </th>
+                <th>
+                  <span class="name-table-head">Positions</span>
+                  <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                </th>
+                <th>
+                  <span class="name-table-head">Email</span>
+                  <span class="up-down-angle">
+                                        <!--<div ><i class="fa fa-angle-up"></i></div>-->
+                                        <!--<div ><i class="fa fa-angle-down"></i></div>-->
+                                    </span>
+                </th>
+                <th>
+                  <span class="name-table-head">Mobile No</span>
+                  <span class="up-down-angle">
+                                        <div (click)="sort('mobile', 'desc')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="sort('mobile', 'asc')" ><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                </th>
+                <th>
+                  <span class="name-table-head">DOB</span>
+                  <span class="up-down-angle">
+                                        <div (click)="sort('dob', 'desc')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="sort('dob', 'asc')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                </th>
+                <th>
+                  <span class="name-table-head">Address</span>
+                  <span class="up-down-angle">
+                                        <div (click)="sort('address', 'desc')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="sort('address', 'desc')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                </th>
+                <th>
+                  <span class="name-table-head">Emergency Contact</span>
+                </th>
+                <th>
+                  <span class="name-table-head">Bank Details</span>
+                </th>
+                <th>
+                  <span class="name-table-head">TFN No</span>
+                </th>
+                <th>
+                  <span class="name-table-head">ABN No</span>
+                </th>
+                <th>
+                  <span class="name-table-head">Superannuation</span>
+                </th>
+                <th>Approved</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let emp of employees let i = index">
+                <td class="text-center">{{emp.identifier}}</td>
+                <td><span class="btn-link" style="cursor:pointer" (click)="edit(emp)">{{emp.firstName}} {{emp.lastName}}</span></td>
+                <td>Category function</td>
+                <td>{{emp.user.email}}</td>
+                <td>{{emp.mobile}}</td>
+                <td>{{emp.dob}}</td>
+                <td>{{emp.address}}</td>
+                <td>
+                  Name: {{emp.emargencyContact}}<br>
+                  Contact No: {{emp.emargencyPhone}}
+                </td>
+                <td>
+                  Bank Name: {{emp.bankName}}<br>
+                  Bank Bsb: {{emp.bsbNo}}<br>
+                  Bank Account No: {{emp.accountNo}}
+                  .</td>
+                <td>{{emp.tfn}}</td>
+                <td>{{emp.abn}}</td>
+                <td>
+                  Name: {{emp.superProvider}}<br>
+                  Number: {{emp.superAccountNo}}
+                </td>
+                <td>
+                  <button class="btn btn-sm" [ngClass]="{'btn-success': emp.approved, 'btn-default': !emp.approved}" (click)="!emp.approved ? initApproval(emp):0">Yes</button>
+                  <button class="btn btn-sm" [ngClass]="{'btn-danger': !emp.approved, 'btn-default': emp.approved}" (click)="emp.approved ? initApproval(emp):0">No</button>
+                </td>
+                <td>
+                  <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <button class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#add" (click)="editEmployee(emp)"><i class="fa fa-pencil-square-o"></i> Quick Edit</button>
+                      <button class="btn dropdown-item btn-sm" (click)="edit(emp)"><i class="fa fa-pencil"></i> Edit & Uploads</button>
+                      <!-- <button class="btn dropdown-item btn-sm"><i class="fa fa-unlock"></i> Reset Password</button> -->
+                      <button class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#archive" (click)="initDelete(emp)"><i class="fa fa-archive"></i> Archive</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 20px; clear: both;">
+          <div class="col-md-6 text-left">
+            <div class="dataTables_length" id="myTable_length">
+              <label>Show
+                <select name="myTable_length" aria-controls="myTable" class="">
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select> entries
+              </label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <ngb-pagination [collectionSize]="pagination.total" [(page)]="pagination.current_page" [maxSize]="5"
+                            [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)"
+                            style="float: right;"></ngb-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="add" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">
+                  Employee Form
+                  <button type="button" class="close" (click)="showMultiSelect = false" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </h4>
+                <form class="floating-labels" role="form" id="Registration" #empRes="ngForm">
+                  <div class="row">
+                    <div class="form-group col-md-6" [ngClass]="{focused: employee.firstName}">
+                      <label>First Name<span style="color: red;">*</span></label>
+                      <input type="text" class="form-control form-control-line" name="firstname"
+                             #firstname="ngModel" [(ngModel)]="employee.firstName" required>
+                      <small class="error" id="firstName"></small>
+                      <span class="bar"></span>
+                      <div *ngIf="!firstname.valid && firstname.touched">
+                        <small class="error" *ngIf="firstname.errors.required">First name required.</small>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-6" [ngClass]="{focused: employee.lastName}">
+                      <label>Last Name<span style="color: red;">*</span></label>
+                      <input type="text" class="form-control form-control-line" name="lastname" #lastname="ngModel" [(ngModel)]="employee.lastName" required>
+                      <small class="error" id="lastName"></small>
+                      <span class="bar"></span>
+                      <div *ngIf="!lastname.valid && lastname.touched">
+                        <small class="error" *ngIf="lastname.errors.required">Last name required.</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.user.email}" *ngIf="!page.edit">
+                      <label>Email<span style="color: red;">*</span></label>
+                      <input type="email" class="form-control" pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*"
+                             name="email" #email="ngModel" [(ngModel)]="employee.user.email" required>
+                      <span class="bar"></span>
+                      <div *ngIf="!email.valid && email.touched">
+                        <small class="error" *ngIf="email.errors.required">Email is required.</small>
+                        <small class="error" *ngIf="email.errors.pattern">Email is not valid.</small>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.user.email}" *ngIf="page.edit">
+                      <label>Email<span style="color: red;">*</span></label>
+                      <input type="email" class="form-control"
+                             name="email" #email="ngModel" [(ngModel)]="employee.user.email" disabled>
+                      <span class="bar"></span>
+                    </div>
+
+                    <div *ngIf="page.edit" class="form-group col-xs-6 col-md-6">
+                      <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#account"
+                              (click)="editLogin(employee)"><i class="fa fa-lock"></i> Update Login</button>
+                    </div>
+                  </div>
+
+                  <div class="row" *ngIf="!page.edit">
+                    <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused:checkPass}">
+                      <label>Password<span style="color: red;">*</span></label>
+                      <input class="form-control" type="password" name="password"
+                             #password="ngModel" [(ngModel)]="checkPass" required>
+                      <span class="bar"></span>
+                      <div *ngIf="password.touched">
+                        <small class="error" *ngIf="checkPass.length > 0 && checkPass.length < 8">Weak password.</small>
+                        <small class="warn" *ngIf="checkPass.length >= 8 && checkPass.length < 12">Medium password.</small>
+                        <small class="success" *ngIf="checkPass.length >= 12">Strong password.</small>
+                      </div>
+                      <div *ngIf="!password.valid && password.touched">
+                        <small class="error" *ngIf="password.errors.required">Password is required.</small>
+                      </div>
+
+                    </div>
+                    <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.user.password}">
+                      <label>Confirm Password<span style="color: red;">*</span></label>
+                      <input class="form-control" type="password" name="confirmpassword"
+                             #confirmpassword="ngModel" [(ngModel)]="employee.user.password"  required>
+                      <span class="bar"></span>
+                      <div *ngIf="password.valid && !confirmpassword.valid && confirmpassword.touched">
+                        <small class="error" *ngIf="confirmpassword.errors.required">Confirmation required.</small>
+                      </div>
+                      <div *ngIf="confirmpassword.touched">
+                        <small class="error" *ngIf="validationForm.checkPassword(checkPass,employee.user.password)">Password is not match with your entry. Please enter again..</small>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group datepic col-xs-6 col-md-6" [ngClass]="{focused: employee.dob}">
+                      <label>Date of Birth<span style="color: red;">*</span></label>
+                      <div class="input-group">
+                        <input class="form-control" ngbDatepicker #x="ngbDatepicker"
+                               name="dob" #dob="ngModel" [(ngModel)]="employee.dob" required>
+                        <span class="input-group-addon" (click)="x.toggle()">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                        <span class="bar"></span>
+                      </div>
+                      <div *ngIf="!dob.valid && dob.touched">
+                        <small class="error" *ngIf="dob.errors.required">Date of Birth is required.</small>
+                      </div>
+
+                    </div>
+                    <div *ngIf="showMultiSelect" class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.nationality}">
+                      <select2 [data]="countriesList"
+                               [options]="options"
+                               [value]= "nationality"
+                               (valueChanged)="countryChange($event)"
+                      ></select2>
+                      <label style="margin-right: 20px;">Nationality</label>
+                    </div>
+                  </div>
+
+
+                  <div class="form-group" [ngClass]="{focused: employee.mobile}">
+                    <label>Mobile</label>
+                    <input type="text" class="form-control" name="mobile" #mobile="ngModel"
+                           [(ngModel)]="employee.mobile">
+                    <small class="error" id="mobile"></small>
+                    <span class="bar"></span>
+
+                    <div *ngIf="mobile.touched">
+                      <small class="error" *ngIf="validationForm.isReallyNumber(employee.mobile)">Please enter numbers.</small>
+                    </div>
+                  </div>
+
+                  <div class="form-group" [ngClass]="{focused: employee.address}">
+                    <label>Address<span style="color: red;">*</span></label>
+                    <input type="text" placeholder="" autocorrect="off" autocapitalize="off" spellcheck="off" class="form-control" name="address" [(ngModel)]="employee.address" (blur)="getAddress()" #address>
+                    <span class="bar"></span>
+
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-md-6" [ngClass]="{focused: employee.emargencyContact}">
+                      <label>Emergency Contact Name</label>
+                      <input type="text" class="form-control" name="emergencyContactName" #emergencyContactName="ngModel" [(ngModel)]="employee.emargencyContact">
+                      <span class="bar"></span>
+
+                    </div>
+                    <div class="form-group col-md-6" [ngClass]="{focused: employee.emargencyPhone}">
+                      <label>Emergency Phone No.</label>
+                      <input type="text" class="form-control" name="emergencyContactMobile" #emergencyContactMobile="ngModel" [(ngModel)]="employee.emargencyPhone">
+                      <span class="bar"></span>
+
+                      <div *ngIf="emergencyContactMobile.touched">
+                        <small class="error" *ngIf="validationForm.isReallyNumber(employee.emargencyPhone)">Please enter numbers.</small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group" [ngClass]="{focused: employee.accountNo}">
+                    <label>Bank Account Number</label>
+                    <input type="text" class="form-control"
+                           name="bankAccountNo" #bankAccountNo="ngModel" [(ngModel)]="employee.accountNo">
+                    <span class="bar"></span>
+
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-md-6" [ngClass]="{focused: employee.bankName}">
+                      <label>Bank name</label>
+                      <input type="text" class="form-control" name="bankName" #bankName="ngModel" [(ngModel)]="employee.bankName">
+                      <span class="bar"></span>
+
+                    </div>
+                    <div class="form-group col-md-6" [ngClass]="{focused: employee.bsbNo}">
+                      <label>Bank Bsb</label>
+                      <input type="text" class="form-control" name="bankBsb" #bankBsb="ngModel" [(ngModel)]="employee.bsbNo">
+                      <span class="bar"></span>
+
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-md-6" [ngClass]="{focused: employee.tfn}">
+                      <label>TFN Number</label>
+                      <input type="text" class="form-control" name="tfnNo" #tfnNo="ngModel" [(ngModel)]="employee.tfn">
+                      <span class="bar"></span>
+                    </div>
+                    <div class="form-group col-md-6" [ngClass]="{focused: employee.abn}">
+                      <label>ABN Number</label>
+                      <input type="text" class="form-control" name="abnNo" #abnNo="ngModel" [(ngModel)]="employee.abn">
+                      <span class="bar"></span>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-md-6" [ngClass]="{focused: employee.superProvider}">
+                      <label>Superannuation Company Name</label>
+                      <input type="text" class="form-control" name="superannuationName" #superannuationName="ngModel" [(ngModel)]="employee.superProvider">
+                      <span class="bar"></span>
+                    </div>
+                    <div class="form-group col-md-6" [ngClass]="{focused: employee.superAccountNo}">
+                      <label>Superannuation Number</label>
+                      <input type="text" class="form-control" name="superannuationNo" #superannuationNo="ngModel" [(ngModel)]="employee.superAccountNo">
+                      <span class="bar"></span>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h6>Have you ever convicted of a crime?</h6>
+                      <div>
+                        <input name="criminal" #criminal="ngModel" [(ngModel)]="employee.isConvictedForCrime" type="radio" id="criminalYes" [value]="true"/>
+                        <label for="criminalYes">Yes</label>
+                        <input name="criminal" #criminal="ngModel" [(ngModel)]="employee.isConvictedForCrime" type="radio" id="criminalNo" [value]="false"/>
+                        <label for="criminalNo">No</label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-6" *ngIf="employee.isConvictedForCrime" [ngClass]="{focused: employee.convictionDetails}" style="margin-top: 10px;">
+                      <label>Conviction Details</label>
+                      <textarea type="text" rows="2" class="form-control" name="criminalDes" #criminalDes="ngModel" [(ngModel)]="employee.convictionDetails"></textarea>
+                      <span class="bar"></span>
+                    </div>
+                  </div>
+
+                  <div class="row" >
+                    <div class="col-md-6">
+                      <h6>Are you an Aboriginal?</h6>
+                      <div>
+                        <input name="isAboriginal" type="radio"  #isAboriginal="ngModel" [(ngModel)]="employee.isAboriginal" id="isAboriginalYes" [value]="true"/>
+                        <label for="isAboriginalYes">Yes</label>
+                        <input name="isAboriginal" type="radio"  #isAboriginal="ngModel" [(ngModel)]="employee.isAboriginal" id="isAboriginalNo" [value]="false"/>
+                        <label for="isAboriginalNo">No</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <h6>Are you an Islander?</h6>
+                      <div>
+                        <input name="isIslander" type="radio" #isIslander="ngModel" [(ngModel)]="employee.isIslander" id="islanderYes" [value]="true"/>
+                        <label for="islanderYes">Yes</label>
+                        <input name="isIslander" type="radio" #isIslander="ngModel" [(ngModel)]="employee.isIslander" id="islanderNo" [value]="false"/>
+                        <label for="islanderNo">No</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group text-center" style="margin: 0px;" *ngIf="!page.loader">
+                    <button class="btn btn-info btn-sm text-uppercase" *ngIf="!page.edit" [disabled] = "!empRes.form.valid" (click) = "addEmployee(employee)">Add employee</button>
+                    <button class="btn btn-info btn-sm text-uppercase" *ngIf="page.edit" [disabled] = "!empRes.form.valid" (click) = "updateEmployee(employee)">Update employee</button>
+                  </div>
+                  <div class="loader" *ngIf="page.loader"></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div id="approve" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="text-center" style="margin: 30px 5px;">
+          <h4>Are you sure you want to
+            <span [ngClass]="{'green':!employee.approved,'red':employee.approved}">{{employee.approved ? ' disapprove ' : ' approve '}}</span>
+            <b>{{employee.firstName}}</b>?
+          </h4>
+        </div>
+        <div class="text-center" *ngIf="!page.loader" style="margin: 10px 5px;">
+          <button type="button" class="btn btn-info btn-sm" (click)="employeeApproval(employee)">Yes</button>
+          <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">No</button>
+        </div>
+        <div class="loader" *ngIf="page.loader"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="archive" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="text-center" style="margin: 30px 5px;">
+          <h4>Are you sure you want to delete <b class="red">{{employeeName}}</b>?
+          </h4>
+        </div>
+        <div class="text-center" *ngIf="!page.loader" style="margin: 10px 5px;">
+          <button type="button" class="btn btn-info btn-sm" (click)="archiveData()">Yes</button>
+          <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">No</button>
+        </div>
+        <div class="loader" *ngIf="page.loader"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Account Modal -->
+<div id="account" class="modal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div>
+          <button (click)="showEmployeeForm()" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="text-center" style="margin: 30px 5px;">
+          <h3>Edit Login Details</h3>
+        </div>
+        <form class="floating-labels" role="form" id="accountForm" #accountForm="ngForm">
+          <div class="form-group">
+            <label>New Email*</label>
+            <input class="form-control form-control-line" type="email"
+                   name="email" #email="ngModel" [(ngModel)]="employee.user.email"
+                   pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
+            <span class="bar"></span>
+            <div *ngIf="!email.valid && email.touched">
+              <small class="error" *ngIf="email.errors.required">Email is required.</small>
+              <small class="error" *ngIf="email.errors.pattern">Email is not valid.</small>
+            </div>
+          </div>
+          <div class="form-group" [ngClass]="{focused: employee.user.password}">
+            <label>Password<span style="color: red;">*</span></label>
+            <input class="form-control" type="password" name="password"
+                   #password="ngModel" [(ngModel)]=" employee.user.password" required>
+            <span class="bar"></span>
+            <div *ngIf="password.touched">
+              <small class="error" *ngIf=" employee.user.password.length > 0 &&  employee.user.password.length < 8">Weak password.</small>
+              <small class="warn" *ngIf=" employee.user.password.length >= 8 &&  employee.user.password.length < 12">Medium password.</small>
+              <small class="success" *ngIf=" employee.user.password.length >= 12">Strong password.</small>
+            </div>
+            <div *ngIf="!password.valid && password.touched">
+              <small class="error" *ngIf="password.errors.required">Password is required.</small>
+            </div>
+
+          </div>
+          <div class="form-group" [ngClass]="{focused: employee.user.password_confirmation}">
+            <label>Confirm Password<span style="color: red;">*</span></label>
+            <input class="form-control" type="password" name="confirmpassword"
+                   #confirmpassword="ngModel" [(ngModel)]="employee.user.password_confirmation"  required>
+            <span class="bar"></span>
+            <div *ngIf="password.valid && !confirmpassword.valid && confirmpassword.touched">
+              <small class="error" *ngIf="confirmpassword.errors.required">Confirmation required.</small>
+            </div>
+            <div *ngIf="confirmpassword.touched">
+              <small class="error" *ngIf="validationForm.checkPassword(employee.user.password, employee.user.password_confirmation)">
+                  Password is not match with your entry. Please enter again..</small>
+            </div>
+
+          </div>
+
+          <div class="text-center" *ngIf="!page.loader" style="margin: 10px 5px;">
+            <button type="button" class="btn btn-info btn-sm" (click)="updateLogin(employee)">Update Login</button>
+            <button (click)="showEmployeeForm()" type="button" class="btn btn-danger
+                  btn-sm" data-dismiss="modal">Cancel</button>
+          </div>
+          <div class="loader" *ngIf="page.loader"></div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

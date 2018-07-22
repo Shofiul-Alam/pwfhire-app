@@ -1,0 +1,29 @@
+<!-- ============================================================== -->
+<!-- Left Sidebar - style you can find in sidebar.scss  -->
+<!-- ============================================================== -->
+<aside class="left-sidebar">
+  <!-- Sidebar scroll-->
+  <div class="scroll-sidebar">
+    <!-- Sidebar navigation-->
+    <nav class="sidebar-nav">
+      <!-- side bar Menu-->
+      <ul id="sidebarnav">
+        <li *ngFor="let menu of leftMenu let i = index" >
+          <a *ngIf="!menu.submenu.length" class="nav-toggler" routerLink="/dashboard" [routerLinkActive]="['router-link-active']">
+              <i [class]="menu.subMenuIcon"></i><span class="hide-menu">{{menu.subMenuTitle}}</span></a>
+          <a *ngIf="menu.submenu.length" class="has-arrow" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-sitemap"></i><span class="hide-menu">Employee</span></a>
+          <ul *ngIf="menu.submenu.length" aria-expanded="false" class="inner">
+            <li *ngFor="let submenu of menu.submenu let j = index" >
+              <a class="nav-toggler" routerLink="{{submenu.link}}" [routerLinkActive]="['router-link-active']">{{submenu.label}}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <!-- End Sidebar navigation -->
+  </div>
+  <!-- End Sidebar scroll-->
+</aside>
+<!-- ============================================================== -->
+<!-- End Left Sidebar - style you can find in sidebar.scss  -->
+<!-- ============================================================== -->
