@@ -12,7 +12,7 @@
       <div class="card-body">
         <div class="text-right" style="width: 100%;margin: 10px 0px;">
           <button class="btn btn-info btn-sm"
-                  data-toggle="modal" data-target="#add" (click)="clearData()"><i class="fa fa-plus"></i> Add Employee</button>
+                  data-toggle="modal" data-target="#add" (click)="initEmployee()"><i class="fa fa-plus" ></i> Add Employee</button>
           <button class="btn btn-success btn-sm" (click)="downloadCSV()"><i class="fa fa-file"></i> Export to CSV</button>
           <!-- <button class="btn btn-info btn-sm"><i class="fa fa-plus"></i></button> -->
         </div>
@@ -156,7 +156,7 @@
                 <td>Category function</td>
                 <td>{{emp.user.email}}</td>
                 <td>{{emp.mobile}}</td>
-                <td>{{emp.dob}}</td>
+                <td>{{emp.dob.date? emp.dob.date : emp.dob}}</td>
                 <td>{{emp.address}}</td>
                 <td>
                   Name: {{emp.emargencyContact}}<br>
@@ -255,7 +255,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.user.email}" *ngIf="!page.edit">
+                    <div class="form-group col-lg-12 col-md-12" [ngClass]="{focused: employee.user.email}" *ngIf="!page.edit">
                       <label>Email<span style="color: red;">*</span></label>
                       <input type="email" class="form-control" pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*"
                              name="email" #email="ngModel" [(ngModel)]="employee.user.email" required>
@@ -350,7 +350,8 @@
 
                   <div class="form-group" [ngClass]="{focused: employee.address}">
                     <label>Address<span style="color: red;">*</span></label>
-                    <input type="text" placeholder="" autocorrect="off" autocapitalize="off" spellcheck="off" class="form-control" name="address" [(ngModel)]="employee.address" (blur)="getAddress()" #address>
+                    <input type="text" placeholder="" autocorrect="off" autocapitalize="off" spellcheck="off" #address #inputAdd="ngModel"
+                           class="form-control" name="address" [(ngModel)]="employee.address" (focus)="getAddress()" required >
                     <span class="bar"></span>
 
                   </div>
@@ -543,6 +544,7 @@
                    name="email" #email="ngModel" [(ngModel)]="employee.user.email"
                    pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
             <span class="bar"></span>
+            <small class="error" id="email"></small>
             <div *ngIf="!email.valid && email.touched">
               <small class="error" *ngIf="email.errors.required">Email is required.</small>
               <small class="error" *ngIf="email.errors.pattern">Email is not valid.</small>
@@ -579,7 +581,7 @@
           </div>
 
           <div class="text-center" *ngIf="!page.loader" style="margin: 10px 5px;">
-            <button type="button" class="btn btn-info btn-sm" (click)="updateLogin(employee)">Update Login</button>
+            <button type="button" class="btn btn-info btn-sm" (click)="updateLogin(employee)" [disabled]="!accountForm.valid">Update Login</button>
             <button (click)="showEmployeeForm()" type="button" class="btn btn-danger
                   btn-sm" data-dismiss="modal">Cancel</button>
           </div>

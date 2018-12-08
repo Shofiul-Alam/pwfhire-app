@@ -18,6 +18,16 @@ import {EmployeeAuthGuardService} from './services/auth/employee-auth-guard.serv
 import {LoginRegisterGuardService} from './services/auth/login-register-guard.service';
 import {EmployeeService} from './services/DataService/employee.service';
 import {UserService} from './services/DataService/user.service';
+import {AgmCoreModule} from '@agm/core';
+import {APIServices} from './services/API/apiServices.service';
+import {UploadService} from './services/DataService/upload.service';
+import {QualificationDocumentService} from './services/DataService/qualificationDocument.service';
+import {QualificationService} from './services/DataService/qualification.service';
+import {ImagePopUpService} from './services/function/imagePopUp.service';
+import {InductionDocumentService} from './services/DataService/inductionDocument.service';
+import {InductionService} from './services/DataService/induction.service';
+
+
 
 export function tokenGetter() {
     return localStorage.getItem('access_token');
@@ -26,7 +36,6 @@ export function tokenGetter() {
 @NgModule({
   declarations: [
     AppComponent,
-    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +48,9 @@ export function tokenGetter() {
             whitelistedDomains: ['pwfhire.pb'],
             blacklistedRoutes: ['pwfhire.pb/auth/']
         }
+    }),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCaa9lro2eKyLYyOhPyR_OhKp9cWrFQtE0', libraries: ['places']
     })
   ],
   providers: [
@@ -52,6 +64,13 @@ export function tokenGetter() {
       LoginRegisterGuardService,
       EmployeeService,
       UserService,
+      APIServices,
+      UploadService,
+      QualificationService,
+      QualificationDocumentService,
+      InductionService,
+      InductionDocumentService,
+      ImagePopUpService,
 
   ],
   bootstrap: [AppComponent]

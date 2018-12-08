@@ -1,6 +1,6 @@
 export class HttpHeaderProperty {
     constructor(
         public name: string,
-        public value: string,
+        public value: any,
     ) {}
 }

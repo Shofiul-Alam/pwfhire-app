@@ -11,10 +11,10 @@
         <li *ngFor="let menu of leftMenu let i = index" >
           <a *ngIf="!menu.submenu.length" class="nav-toggler" routerLink="/dashboard" [routerLinkActive]="['router-link-active']">
               <i [class]="menu.subMenuIcon"></i><span class="hide-menu">{{menu.subMenuTitle}}</span></a>
-          <a *ngIf="menu.submenu.length" class="has-arrow" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-sitemap"></i><span class="hide-menu">Employee</span></a>
-          <ul *ngIf="menu.submenu.length" aria-expanded="false" class="inner">
+          <a *ngIf="menu.submenu.length" class="has-arrow" href="javascript:void(0)" aria-expanded="false"><i [class]="menu.subMenuIcon"></i><span class="hide-menu">{{menu.subMenuTitle}}</span></a>
+          <ul *ngIf="menu.submenu.length" aria-expanded="false" class="inner" style="display:none">
             <li *ngFor="let submenu of menu.submenu let j = index" >
-              <a class="nav-toggler" routerLink="{{submenu.link}}" [routerLinkActive]="['router-link-active']">{{submenu.label}}</a>
+             <a class="nav-toggler" [routerLink]="submenu.link" [routerLinkActive]="['router-link-active']"> <i [class]="submenu.icon"></i> {{submenu.label}}</a>
             </li>
           </ul>
         </li>

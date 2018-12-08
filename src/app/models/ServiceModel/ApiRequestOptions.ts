@@ -14,19 +14,21 @@ export class ApiRequestOptions {
 /** HeaderConstructor **/
 
  constructor(customHeaders?: Array<HttpHeaderProperty>) {
-    const httpHeadersArr = Array<HttpHeaders>();
-    httpHeadersArr[0] = new HttpHeaders();
-    let i = 0;
+     if (typeof customHeaders !== 'undefined') {
+         const httpHeadersArr = Array<HttpHeaders>();
+         httpHeadersArr[0] = new HttpHeaders();
+         let i = 0;
 
-    for (const property of customHeaders) {
-        i++;
-        httpHeadersArr[i] = httpHeadersArr[(i - 1)].set(property.name, property.value);
+         for (const property of customHeaders) {
+             i++;
+             httpHeadersArr[i] = httpHeadersArr[(i - 1)].set(property.name, property.value);
+         }
+
+         this.headers = httpHeadersArr[i];
     }
 
-     this.headers = httpHeadersArr[i];
  }
- prepareHeaders (name: string, value: string): HttpHeaders {
-     const httpHeaders = this.headers.set(name, value);
-     return httpHeaders;
+ prepareHeaders (name: string, value: any): void {
+     this.headers.set(name, value);
  }
 }

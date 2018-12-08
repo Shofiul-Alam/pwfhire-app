@@ -5,5 +5,7 @@ export class Skill {
     public createdOn: any;
     public updatedOn: any;
     public deletedOn: any;
+    public id: any;
+    public text: any;
     constructor() {}
 }

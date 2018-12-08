@@ -1,0 +1,26 @@
+import {CommonModule} from '@angular/common';
+import { NgModule } from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AllTimesheetComponent} from './all-timesheet.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
+
+const routes: Routes = [{
+    path: '',
+    data: {
+        title: 'Time Sheets List',
+        urls: [{title: 'Dashboard', url: '/dashboard'}, { title: 'Time Sheets List'}]
+    },
+    component: AllTimesheetComponent
+}];
+
+
+@NgModule({
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        NgbModule,
+  ],
+  declarations: []
+})
+export class AllTimesheetModule { }

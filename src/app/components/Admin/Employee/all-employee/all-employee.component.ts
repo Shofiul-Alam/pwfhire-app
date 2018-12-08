@@ -1,21 +1,22 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit  } from '@angular/core';
+import {Select2OptionData} from 'ng2-select2';
+import {Router} from '@angular/router';
+import {NgbDatepickerConfig} from '@ng-bootstrap/ng-bootstrap';
 
 import {EmployeeService} from '../../../../services/DataService/employee.service';
+import {ValidationService} from '../../../../services/form/formValidation.service';
+import {UserService} from '../../../../services/DataService/user.service';
+
 import {Pagination} from '../../../../models/ViewModel/Pagination';
 import {Employee} from '../../../../models/DataModel/Employee';
-import {ValidationService} from '../../../../services/form/formValidation.service';
 import {Response} from '../../../../models/ServiceModel/Response';
-import {NgbDatepickerConfig} from '@ng-bootstrap/ng-bootstrap';
 import {Filter} from '../../../../models/ViewModel/Filter';
 import {Page} from '../../../../models/ViewModel/Page';
-import {Select2OptionData} from 'ng2-select2';
-import {User} from '../../../../models/DataModel/User';
 import {EmployeeRequest} from '../../../../models/DataModel/DataRequestModel/EmployeeRequest';
 import {UserRequest} from '../../../../models/DataModel/DataRequestModel/UserRequest';
-import {forEach} from '@angular/router/src/utils/collection';
-import {split} from 'ts-node';
-import {UserService} from '../../../../services/DataService/user.service';
 import {ErrorResponse} from '../../../../models/ServiceModel/ErrorResponse';
+import {APIServices} from '../../../../services/API/apiServices.service';
+
 
 declare var $: any;
 
@@ -30,7 +31,6 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
 
     /** My code started here **/
     public employees: Array<Employee>;
-    public employee: Employee;
     public employeeRequest: EmployeeRequest;
     public userRequest: UserRequest;
     public pagination: Pagination;
@@ -42,13 +42,12 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
     public showMultiSelect = false;
     public error: ErrorResponse;
 
-
-    // public get employee():Employee {
-    //     return this._empManagementService.employee;
-    // }
-    // public set employee(value: Employee) {
-    //     this._empManagementService.employee = value;
-    // }
+    public get employee(): Employee {
+        return this._employeeService.employee;
+    }
+    public set employee(value: Employee) {
+        this._employeeService.employee = value;
+    }
 
     @ViewChild('address') public searchElement: ElementRef;
 
@@ -57,10 +56,10 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
         private _employeeService: EmployeeService,
         private _userService: UserService,
         private _rootNode: ElementRef,
-        // private router: Router,
+        private router: Router,
+        private apiService: APIServices,
         // private _export: ExportCSV,
         // config: NgbDatepickerConfig,
-        // private apiService: APIServices,
         // public  commonService: CommonService,
 
     ) {
@@ -69,7 +68,6 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
         this.pagination = new Pagination();
         this.filter = new Filter();
         this.page = new Page();
-        this.employee = new Employee();
         this.userRequest = new UserRequest();
         this.error = new ErrorResponse();
         // config.minDate = {year: 1950, month: 1, day: 1};
@@ -77,11 +75,9 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
 
     }
 
-    // private init() {
-    //     this.userDeclearation = new UserDeclearation();
-    //     this.employee = new Employee();
-    //     this.empFilter = new EmpListFilter();
-    // }
+    private init() {
+        this.employee = new Employee();
+    }
 
     ngOnInit() {
       this.getAllEmployees(this.filter);
@@ -94,6 +90,14 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
       this.options = {
         multiple: true,
       };
+    }
+
+    initEmployee() {
+        this.employee = new Employee();
+        console.log(this.employee);
+        this.nationality = '';
+        this.page.edit = false;
+        window.sessionStorage.removeItem('address');
     }
 
     cancelPopUp() {
@@ -172,14 +176,15 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
             this.nationality = countryCodes;
         }
         setTimeout(() => {this.validationForm.floatLabel(); }, 100);
-        this.employee.dob = this.validationForm.convertToCustomDate(employee.dob);
+        this.employee.dob = this.validationForm.createNgDate(employee.dob);
+        this.employee._method = 'PUT';
     }
     updateEmployee(employee: Employee) {
         this.page.loader = true;
         this.employee = employee;
         this.employee.dob = this.validationForm.convertToCustomDate(employee.dob);
         this.employeeRequest = new EmployeeRequest(this.employee);
-        this._employeeService.updateEmployee(this.employeeRequest). subscribe(
+        this._employeeService.quickUpdateEmployee(this.employeeRequest, this.employeeRequest.identifier). subscribe(
             employeeResponse => {
                 const response = new Response();
                 Object.assign(response, employeeResponse);
@@ -224,13 +229,19 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
             error => {
                 this.page.loader = false;
                 Object.assign(this.error, error.error);
-                this.errorHandler(this.error);
+                this.validationForm.errorHandler(error);
             }
         );
     }
 
     showEmployeeForm() {
         this.page.modals.employee.modal('show');
+    }
+
+    edit(employee) {
+        this.employee = employee;
+        this.employee.dob = this.validationForm.createNgDate(employee.dob);
+        this.router.navigate(['/edit-employee']);
     }
 
     ngAfterViewInit() {
@@ -249,14 +260,13 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
     }
 
     countryChange(data: {value: string[]}) {
-        console.log(data.value);
+
         setTimeout(() => {
             let selectedCountriesCode = '';
             for (const countryCode of data.value) {
                 selectedCountriesCode += countryCode + '|';
             }
             this.employee.nationality = selectedCountriesCode;
-            console.log(data.value, this.employee.nationality);
         }, 100);
     }
 
@@ -273,7 +283,7 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
     }
 
     getAddress() {
-        // this.apiService.addressAutoComplete(this.searchElement.nativeElement);
+        this.apiService.addressAutoComplete(this.searchElement.nativeElement);
     }
 
     errorHandler(error: ErrorResponse) {
@@ -323,12 +333,7 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
     //
     //
     //
-    // clearData(){
-    //     this.init();
-    //     this.nationality = [];
-    //     this.extra.editTrue = false;
-    //     window.sessionStorage.removeItem('address');
-    // }
+
     //
     // onSubmit(f) {
     //     this.getEmpAddress();
@@ -362,15 +367,6 @@ export class AllEmployeeComponent implements OnInit, AfterViewInit {
     //     f.form.reset();
     // }
     //
-    // edit(employee) {
-    //     this.employee = employee;
-    //     if (employee.dob != null && employee.dob.timestamp != null) {
-    //         var date = this.validationForm.convertDate(employee.dob.timestamp);
-    //         this.employee.dob = date;
-    //         // console.log(date);
-    //     }
-    //     this.router.navigate(['/edit-employee']);
-    // }
     //
     //
     //

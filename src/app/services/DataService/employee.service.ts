@@ -4,6 +4,8 @@ import {ApiRequestOptions} from '../../models/ServiceModel/ApiRequestOptions';
 import {Response} from '../../models/ServiceModel/Response';
 import {EmployeeRequest} from '../../models/DataModel/DataRequestModel/EmployeeRequest';
 import {Filter} from '../../models/ViewModel/Filter';
+import {Employee} from '../../models/DataModel/Employee';
+import {HttpHeaderProperty} from '../../models/ServiceModel/HttpHeaderProperty';
 
 
 @Injectable({
@@ -12,9 +14,14 @@ import {Filter} from '../../models/ViewModel/Filter';
 export class EmployeeService {
 
   public authApiRequest: ApiRequestOptions;
+  public employee: Employee = new Employee();
+  public url: string;
+
   constructor(
       private _appService: AppService,
-  ) { }
+  ) {
+      this.url = _appService.serverURL;
+  }
 
     public getAllEmployees(page: number, filter: Filter) {
         const endpoint = '/employees?page=' + page + '&orderBy=' + filter.orderBy + '&sort=' + filter.sort
@@ -26,9 +33,16 @@ export class EmployeeService {
         const endpoint = '/employees?XDEBUG_SESSION=PHPSTORM';
         return this._appService.post<Response>(endpoint, employee, this.authApiRequest);
     }
-    public updateEmployee(employee: EmployeeRequest) {
-        const endpoint = '/employees/' + employee.identifier + '?XDEBUG_SESSION=PHPSTORM';
-        return this._appService.put<Response>(endpoint, employee, this.authApiRequest);
+    public updateEmployee(employee: any, id) {
+
+        const endpoint = '/employees/' + id + '?XDEBUG_SESSION_START=PHPSTORM';
+        return this._appService.post<Response>(endpoint, employee);
+    }
+
+    public quickUpdateEmployee(employee: any, id) {
+
+        const endpoint = '/employees/' + id + '?XDEBUG_SESSION_START=PHPSTORM';
+        return this._appService.put<Response>(endpoint, employee);
     }
     public deleteEmployee(id) {
         const endpoint = '/employees/' + id + '?XDEBUG_SESSION=PHPSTORM';

@@ -22,6 +22,7 @@ export class Employee {
     public convictionDetails: any;
     public isAboriginal: any;
     public isIslander: any;
+    public image: any;
     public avater: any;
     public avaterUrl: any;
     public avaterType: any;
@@ -33,8 +34,11 @@ export class Employee {
     public userIdentifier: any;
     public positionsIdentifier: any;
     public approved: any;
+    public lat: any;
+    public long: any;
     public user: User = new User();
     public positions: Array<Position> = new Array<Position>();
-
+    public _method: string;
+    public daysWithUs;
     constructor() {}
 }

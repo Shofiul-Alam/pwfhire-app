@@ -15,5 +15,8 @@ export class EmployeeInduction {
     public employeeIdentifier: any;
     public form: Form = new Form();
     public employee: Employee = new Employee();
+    public image: any;
+    public id: any;
+    public text; any;
     constructor() {}
 }

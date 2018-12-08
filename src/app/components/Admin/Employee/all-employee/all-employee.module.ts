@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import { AllEmployeeComponent } from '../../../Admin/Employee/all-employee/all-employee.component';
 import {NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +12,7 @@ const routes: Routes = [{
     path: '',
     data: {
         title: 'Employees',
-        urls: [{title: 'Employees', url: '/dashboard'}, { title: 'Employees'}]
+        urls: [{title: 'Dashboard', url: '/dashboard'}, { title: 'Employees'}]
     },
     component: AllEmployeeComponent
 }];

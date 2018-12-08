@@ -7,5 +7,7 @@ export class Induction {
     public createdOn: any;
     public updatedOn: any;
     public deletedOn: any;
+    public text: any;
+    public id: any;
     constructor() {}
 }

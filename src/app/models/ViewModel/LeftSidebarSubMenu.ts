@@ -1,5 +1,4 @@
 import {LeftSidebarMenuItem} from './LeftSidebarMenuItem';
-import {forEach} from '@angular/router/src/utils/collection';
 
 export class LeftSidebarSubMenu {
 
@@ -18,8 +17,9 @@ export class LeftSidebarSubMenu {
             this.subMenuTitle = subMenuTitle;
             this.subMenuIcon = subIcon;
             if (subMenuCssClass != null && subMenuCssClass.length > 0) {
-                for (const subMenuCss of subMenuCssClass)
-                this.subMenuCssClass.push(subMenuCss);
+                for (const subMenuCss of subMenuCssClass) {
+                    this.subMenuCssClass.push(subMenuCss);
+                }
             }
 
             this.subMenuLink = subLink;

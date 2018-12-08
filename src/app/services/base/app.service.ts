@@ -3,18 +3,18 @@ import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {ApiRequestOptions} from '../../models/ServiceModel/ApiRequestOptions';
 import {HttpHeaderProperty} from '../../models/ServiceModel/HttpHeaderProperty';
+import {url} from '../../models/Global/Global';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
-  private serverURL = 'http://pwfhire.pb';
+  public serverURL = url;
   private clientToken = '';
   private accessToken = '';
   private headerArr: Array<HttpHeaderProperty> = [
                                             new HttpHeaderProperty('Accept', 'application/json'),
-                                            new HttpHeaderProperty('Content-type', 'application/json'),
                                         ];
   private apiRequestOptions: ApiRequestOptions = new ApiRequestOptions(this.headerArr);
 
@@ -25,14 +25,20 @@ export class AppService {
       this.clientToken = localStorage.getItem('machine_access_token');
       this.accessToken = localStorage.getItem('access_token');
       if (this.accessToken) {
-          this.apiRequestOptions.headers = this.setHeaders(this.accessToken);
+          this.setHeaders('Authorization', this.accessToken);
       } else if (this.clientToken) {
-          this.apiRequestOptions.headers = this.setHeaders(this.clientToken);
+          this.setHeaders('Authorization', this.clientToken);
       }
   }
-  setHeaders(token) {
-      const bearer = 'Bearer ' + token;
-      return this.apiRequestOptions.prepareHeaders('Authorization', bearer);
+  setHeaders(name: any, value: any) {
+      if (name === 'Authorization') {
+          const bearer = 'Bearer ' + value;
+          this.apiRequestOptions.headers.delete(name);
+          this.apiRequestOptions.prepareHeaders(name, bearer);
+      } else {
+          this.apiRequestOptions.headers.delete(name);
+          this.apiRequestOptions.prepareHeaders(name, value);
+      }
   }
     /**
      * URL builder getUrl method
@@ -47,11 +53,17 @@ export class AppService {
     get<T>(endpoint: string, options?: ApiRequestOptions): Observable<HttpResponse<T>> {
         this.tokenFormation();
 
-        const url = this.getUrl(endpoint);
+        const getUrl = this.getUrl(endpoint);
+
+        if (typeof options !== 'undefined' && typeof options.headers !== 'undefined') {
+            for (const key of options.headers.keys()) {
+                this.setHeaders(key, options.headers.get(key));
+            }
+        }
 
         const op = this.apiRequestOptions;
 
-        return this.http.get<T>(url, op);
+        return this.http.get<T>(getUrl, op);
     }
 
     /**
@@ -66,11 +78,17 @@ export class AppService {
     post<T>(endpoint: string, objectParams: any, options?: ApiRequestOptions): Observable<HttpResponse<T>> {
         this.tokenFormation();
 
-        const url = this.getUrl(endpoint);
+        const postUrl = this.getUrl(endpoint);
+
+        if (typeof options !== 'undefined' && typeof options.headers !== 'undefined') {
+            for (const key of options.headers.keys()) {
+                this.setHeaders(key, options.headers.get(key));
+            }
+        }
 
         const op = this.apiRequestOptions;
 
-        return this.http.post<T>(url, objectParams, op);
+        return this.http.post<T>(postUrl, objectParams, op);
     }
     /**
      * Performs a request with `put` http method.
@@ -78,11 +96,17 @@ export class AppService {
     put<T>(endpoint: string, objectParams: any, options?: ApiRequestOptions): Observable<HttpResponse<T>> {
         this.tokenFormation();
 
-        const url = this.getUrl(endpoint);
+        const putUrl = this.getUrl(endpoint);
+
+        if (typeof options !== 'undefined' && typeof options.headers !== 'undefined') {
+            for (const key of options.headers.keys()) {
+                this.setHeaders(key, options.headers.get(key));
+            }
+        }
 
         const op = this.apiRequestOptions;
 
-        return this.http.put<T>(url, objectParams, op);
+        return this.http.put<T>(putUrl, objectParams, op);
     }
     /**
      * Performs a request with `delete` http method.
@@ -90,10 +114,10 @@ export class AppService {
     delete<T>(endpoint: string, options?: ApiRequestOptions): Observable<HttpResponse<T>> {
         this.tokenFormation();
 
-        const url = this.getUrl(endpoint);
+        const deleteUrl = this.getUrl(endpoint);
 
         const op = this.apiRequestOptions;
 
-        return this.http.delete<T>(url, op);
+        return this.http.delete<T>(deleteUrl, op);
     }
 }

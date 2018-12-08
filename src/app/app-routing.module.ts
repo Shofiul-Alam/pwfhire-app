@@ -13,6 +13,9 @@ const routes: Routes = [
     { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [LoginRegisterGuardService] },
     { path: 'register', loadChildren: './register/register.module#RegisterModule', canActivate: [LoginRegisterGuardService] },
     { path: 'unauthorized', loadChildren: './401/unauthorized.module#UnauthorizedModule' },
+
+    { path: '404', loadChildren: './404/not-found.module#NotFoundModule' },
+    { path: '**', redirectTo: '404' }
 ];
 
 @NgModule({

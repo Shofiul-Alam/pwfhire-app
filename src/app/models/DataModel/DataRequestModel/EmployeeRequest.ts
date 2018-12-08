@@ -29,6 +29,10 @@ export class EmployeeRequest {
     public approved: any;
     public userIdentifier: any;
     public positionsIdentifier: any;
+    public image: any;
+    public lat: any;
+    public long: any;
+    public _method: any;
 
 
     constructor(employee?: Employee) {
@@ -60,6 +64,9 @@ export class EmployeeRequest {
         this.approved = employee.approved;
         this.userIdentifier = employee.userIdentifier;
         this.positionsIdentifier = employee.positionsIdentifier;
+        this.lat = employee.lat;
+        this.long = employee.long;
+        this.image = employee.image;
 
     }
 }

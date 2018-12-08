@@ -11,6 +11,9 @@ export class Page {
         public cssClass: string = '',
         public title: string = '',
         public modals: any = {},
+        public fileUpload: boolean = false,
+        public fileLoad: boolean = false,
         public edit = false,
+        public error = false,
     ) {}
 }

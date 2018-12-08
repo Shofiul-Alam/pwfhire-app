@@ -17,5 +17,6 @@ export class Qualification {
     public skillIdentifier: any;
     public employee: Employee = new Employee();
     public skill: Skill = new Skill();
+    public image: any;
     constructor() {}
 }

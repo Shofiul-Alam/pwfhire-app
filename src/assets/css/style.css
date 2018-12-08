@@ -896,6 +896,12 @@ sidebar navigation
     -webkit-transition: all .3s ease-out;
     -o-transition: all .3s ease-out;
     transition: all .3s ease-out; }
+.sidebar-nav .has-arrow.arrow-down::after {
+  -webkit-transform: rotate(225deg) translate(0, -50%);
+  -ms-transform: rotate(225deg) translate(0, -50%);
+  -o-transform: rotate(225deg) translate(0, -50%);
+  transform: rotate(225deg) translate(0, -50%);
+}
 
 .sidebar-nav .active > .has-arrow::after,
 .sidebar-nav li > .has-arrow.active::after,
